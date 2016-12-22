@@ -1,5 +1,6 @@
 package be.vdab.filters;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.*;
@@ -16,6 +17,10 @@ public class JPAFilter implements Filter{
 
 
     public void init(FilterConfig filterConfig) throws ServletException {
+    }
+
+    public static EntityManager getEntityManager() {
+        return entityManagerFactory.createEntityManager();
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

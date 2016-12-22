@@ -19,6 +19,27 @@ public class Docent implements Serializable{
     private String familienaam;
     private BigDecimal wedde;
     private long rijksRegisterNr;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getVoornaam() {
+        return voornaam;
+    }
+
+    public String getFamilienaam() {
+        return familienaam;
+    }
+
+    public BigDecimal getWedde() {
+        return wedde;
+    }
+
+    public long getRijksRegisterNr() {
+        return rijksRegisterNr;
+    }
+
     // je maakt getters voor de private variabelen, behalve voor serialVersionUID
     public String getNaam() {
         return voornaam + ' ' + familienaam;
