@@ -1,5 +1,7 @@
 package be.vdab.entities;
 
+import be.vdab.enums.Geslacht;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,7 +21,12 @@ public class Docent implements Serializable{
     private String familienaam;
     private BigDecimal wedde;
     private long rijksRegisterNr;
+    @Enumerated(EnumType.STRING)
+    private Geslacht geslacht;
 
+    public Geslacht getGeslacht() {
+        return geslacht;
+    }
     public long getId() {
         return id;
     }

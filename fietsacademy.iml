@@ -17,7 +17,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="fietsacademy" />
+          <factory-entry name="fietsacademy" value="71e9e6df-48ae-43b9-ac75-9f616cc68555" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
