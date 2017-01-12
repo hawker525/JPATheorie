@@ -16,6 +16,13 @@
                required autofocus type='number' min='1'></label>
     <input type='submit' value='Zoeken'>
 </form>
+<h2>Acties</h2>
+<c:url value='/docenten/verwijderen.htm' var='verwijderURL'>
+    <c:param name='id' value='${docent.id}'/>
+</c:url>
+<form action='${verwijderURL}' method='post'>
+    <input type='submit' value='Verwijderen'>
+</form>
 <c:if test='${not empty param and empty fouten and empty docent}'>
     Docent niet gevonden
 </c:if>

@@ -18,4 +18,8 @@ public class DocentRepository {
     public void create(Docent docent, EntityManager entityManager) {
         entityManager.persist(docent);
     }
+
+    public void delete(long id, EntityManager entityManager) {
+        read(id, entityManager).ifPresent(entityManager::remove);
+    }
 }
