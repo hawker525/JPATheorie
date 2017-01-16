@@ -5,6 +5,7 @@ import be.vdab.enums.Geslacht;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Created by Maarten Westelinck on 19/12/2016.
@@ -33,6 +34,11 @@ public class Docent implements Serializable{
     }
 
     protected Docent(){}
+
+    public void opslag(BigDecimal percentage) {
+        BigDecimal factor = BigDecimal.ONE.add(percentage.divide(BigDecimal.valueOf(100)));
+        wedde = wedde.multiply(factor).setScale(2, RoundingMode.HALF_UP);
+    }
 
     public static boolean isVoornaamValid(String voornaam) {
         return voornaam != null && !voornaam.isEmpty();

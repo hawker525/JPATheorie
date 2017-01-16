@@ -26,6 +26,10 @@
 <c:if test='${not empty param and empty fouten and empty docent}'>
     Docent niet gevonden
 </c:if>
+<c:url value="/docenten/opslag.htm" var="opslagURl">
+    <c:param name="id" value="${docent.id}"/>
+</c:url>
+<a href="${opslagURl}" class="knop"><input type="button" value="Opslag"></a>
 <c:if test='${not empty docent}'>
     ${docent.naam}, wedde: &euro; <fmt:formatNumber value='${docent.wedde}'/>, ${docent.geslacht == 'MAN' ? '&#x2642;' : '&#x2640;'}
 </c:if>

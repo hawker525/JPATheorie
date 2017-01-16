@@ -6,6 +6,7 @@ import be.vdab.repositories.DocentRepository;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -19,6 +20,20 @@ public class DocentService {
         EntityManager entityManager = JPAFilter.getEntityManager();
         try{
             return docentRepository.read(id, entityManager);
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void opslag(long id, BigDecimal percentage) {
+        EntityManager entityManager = JPAFilter.getEntityManager();
+        entityManager.getTransaction().begin();
+        try {
+            docentRepository.read(id, entityManager).ifPresent(d -> d.opslag(percentage));
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            entityManager.getTransaction().rollback();
+            throw ex;
         } finally {
             entityManager.close();
         }
