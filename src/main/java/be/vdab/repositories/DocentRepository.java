@@ -10,16 +10,16 @@ import java.util.Optional;
  * Created by Maarten Westelinck on 22/12/2016.
  *
  */
-public class DocentRepository {
-    public Optional<Docent> read(long id, EntityManager entityManager) {
-        return Optional.ofNullable(entityManager.find(Docent.class, id));
+public class DocentRepository extends AbstractRepository{
+    public Optional<Docent> read(long id) {
+        return Optional.ofNullable(getEntityManager().find(Docent.class, id));
     }
 
-    public void create(Docent docent, EntityManager entityManager) {
-        entityManager.persist(docent);
+    public void create(Docent docent) {
+        getEntityManager().persist(docent);
     }
 
-    public void delete(long id, EntityManager entityManager) {
-        read(id, entityManager).ifPresent(entityManager::remove);
+    public void delete(long id) {
+        read(id).ifPresent(getEntityManager()::remove);
     }
 }

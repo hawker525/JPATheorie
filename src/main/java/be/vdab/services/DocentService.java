@@ -13,57 +13,43 @@ import java.util.Optional;
  * Created by Maarten Westelinck on 12/01/2017 for fietsacademy.
  *
  */
-public class DocentService {
+public class DocentService extends AbstractService{
     private final DocentRepository docentRepository = new DocentRepository();
 
     public Optional<Docent> read(long id) {
-        EntityManager entityManager = JPAFilter.getEntityManager();
-        try{
-            return docentRepository.read(id, entityManager);
-        } finally {
-            entityManager.close();
-        }
+        return docentRepository.read(id);
     }
 
     public void opslag(long id, BigDecimal percentage) {
-        EntityManager entityManager = JPAFilter.getEntityManager();
-        entityManager.getTransaction().begin();
+        beginTransaction();
         try {
-            docentRepository.read(id, entityManager).ifPresent(d -> d.opslag(percentage));
-            entityManager.getTransaction().commit();
+            docentRepository.read(id).ifPresent(d -> d.opslag(percentage));
+            commit();
         } catch (RuntimeException ex) {
-            entityManager.getTransaction().rollback();
+            rollback();
             throw ex;
-        } finally {
-            entityManager.close();
         }
     }
 
     public void create(Docent docent) {
-        EntityManager entityManager = JPAFilter.getEntityManager();
-        entityManager.getTransaction().begin();
-        try{
-            docentRepository.create(docent, entityManager);
-            entityManager.getTransaction().commit();
+        beginTransaction();
+        try {
+            docentRepository.create(docent);
+            commit();
         } catch (RuntimeException ex) {
-            entityManager.getTransaction().rollback();
+            rollback();
             throw ex;
-        } finally {
-            entityManager.close();
         }
     }
 
     public void delete(long id) {
-        EntityManager entityManager = JPAFilter.getEntityManager();
-        entityManager.getTransaction().begin();
+        beginTransaction();
         try {
-            docentRepository.delete(id, entityManager);
-            entityManager.getTransaction().commit();
-        } catch (RuntimeException e) {
-            entityManager.getTransaction().rollback();
-            throw e;
-        } finally {
-            entityManager.close();
+            docentRepository.delete(id);
+            commit();
+        } catch (RuntimeException ex) {
+            rollback();
+            throw ex;
         }
     }
 
