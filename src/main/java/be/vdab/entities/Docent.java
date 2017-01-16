@@ -9,7 +9,11 @@ import java.math.RoundingMode;
 
 /**
  * Created by Maarten Westelinck on 19/12/2016.
+ *
  */
+//@NamedQuery(name = "Docent.findWeddeBetween", query = "select d from Docent d where d.wedde between :van and :tot order by d.wedde, d.id")
+
+
 @Entity
 @Table(name = "docenten")
 public class Docent implements Serializable{

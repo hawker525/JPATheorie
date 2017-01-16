@@ -3,10 +3,13 @@ package be.vdab.services;
 import be.vdab.entities.Docent;
 import be.vdab.filters.JPAFilter;
 import be.vdab.repositories.DocentRepository;
+import be.vdab.valueobjects.AantalDocentenPerWedde;
+import be.vdab.valueobjects.VoornaamEnId;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +23,10 @@ public class DocentService extends AbstractService{
         return docentRepository.read(id);
     }
 
+    public List<Docent> findByWeddeBetween(BigDecimal van, BigDecimal tot, int vanafRij, int aantalRijen) {
+        return docentRepository.findWeddeBetween(van, tot, vanafRij, aantalRijen);
+    }
+
     public void opslag(long id, BigDecimal percentage) {
         beginTransaction();
         try {
@@ -29,6 +36,18 @@ public class DocentService extends AbstractService{
             rollback();
             throw ex;
         }
+    }
+
+    public List<AantalDocentenPerWedde> findAantalDocentenPerWedde() {
+        return docentRepository.findAantalDocentenPerWedde();
+    }
+
+    public BigDecimal findMaxWedde() {
+        return docentRepository.findMaxWedde();
+    }
+
+    public List<VoornaamEnId> findVoornaamEnId() {
+        return docentRepository.findVoornamen();
     }
 
     public void create(Docent docent) {
