@@ -25,6 +25,12 @@ public class DocentRepository extends AbstractRepository{
         getEntityManager().persist(docent);
     }
 
+    public void algemeneOpslag(BigDecimal factor) {
+        getEntityManager().createNamedQuery("Docent.algemeneOpslag")
+                .setParameter("factor", factor)
+                .executeUpdate();
+    }
+
     public void delete(long id) {
         read(id).ifPresent(getEntityManager()::remove);
     }
