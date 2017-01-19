@@ -2,6 +2,7 @@ package be.vdab.servlets.docenten;
 
 import be.vdab.entities.Docent;
 import be.vdab.enums.Geslacht;
+import be.vdab.services.CampusService;
 import be.vdab.services.DocentService;
 
 import javax.servlet.ServletException;
@@ -23,6 +24,7 @@ public class ToevoegenServlet extends HttpServlet {
     private static final String VIEW = "/WEB-INF/JSP/docenten/toevoegen.jsp";
     private static final String REDIRECT_URL = "%s/docenten/zoeken.htm?id=%d";
     private final transient DocentService docentService = new DocentService();
+    private final transient CampusService campusService = new CampusService();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String, String> fouten = new HashMap<>();
@@ -52,20 +54,28 @@ public class ToevoegenServlet extends HttpServlet {
         } catch (NumberFormatException ex) {
             fouten.put("rijksregisternr", "verkeerde cijfers");
         }
+        String campusId = request.getParameter("campussen");
+        if (campusId == null) {
+            fouten.put("campussen", "verplicht");
+        }
         if (fouten.isEmpty()) {
             Docent docent =
                     new Docent(voornaam, familienaam, wedde, Geslacht.valueOf(geslacht),
                             rijksRegisterNr);
+            campusService.read(Long.parseLong(campusId))
+                    .ifPresent(docent::setCampus);
             docentService.create(docent);
             response.sendRedirect(response.encodeRedirectURL(String.format(
                     REDIRECT_URL, request.getContextPath(), docent.getId())));
         } else {
             request.setAttribute("fouten", fouten);
+            request.setAttribute("campussen", campusService.findAll());
             request.getRequestDispatcher(VIEW).forward(request, response);
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("campussen", campusService.findAll());
         request.getRequestDispatcher(VIEW).forward(request, response);
     }
 }
