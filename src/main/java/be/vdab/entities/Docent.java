@@ -6,10 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Maarten Westelinck on 19/12/2016.
@@ -36,6 +33,30 @@ public class Docent implements Serializable{
     private long rijksRegisterNr;
     @Enumerated(EnumType.STRING)
     private Geslacht geslacht;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "campusid")
+    private Campus campus;
+
+    @ManyToMany(mappedBy = "docenten")
+    private Set<Verantwoordelijkheid> verantwoordelijkheden = new LinkedHashSet<>();
+
+    public void add(Verantwoordelijkheid verantwoordelijkheid) {
+        verantwoordelijkheden.add(verantwoordelijkheid);
+        if ( ! verantwoordelijkheid.getDocenten().contains(this)) {
+            verantwoordelijkheid.add(this);
+        }
+    }
+
+    public void remove(Verantwoordelijkheid verantwoordelijkheid) {
+        verantwoordelijkheden.remove(verantwoordelijkheid);
+        if (verantwoordelijkheid.getDocenten().contains(this)) {
+            verantwoordelijkheid.remove(this);
+        }
+    }
+
+    public Set<Verantwoordelijkheid> getVerantwoordelijkheden() {
+        return Collections.unmodifiableSet(verantwoordelijkheden);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -52,9 +73,6 @@ public class Docent implements Serializable{
         return (int) (getRijksRegisterNr() ^ (getRijksRegisterNr() >>> 32));
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "campusid")
-    private Campus campus;
 
     public Campus getCampus() {
         return campus;
@@ -77,6 +95,7 @@ public class Docent implements Serializable{
         this.rijksRegisterNr = rijksRegisterNr;
         this.geslacht = geslacht;
         bijnamen = new HashSet<>();
+        verantwoordelijkheden = new LinkedHashSet<>();
     }
 
     protected Docent(){}
