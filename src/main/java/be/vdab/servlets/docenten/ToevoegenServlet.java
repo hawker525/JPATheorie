@@ -62,8 +62,8 @@ public class ToevoegenServlet extends HttpServlet {
             Docent docent =
                     new Docent(voornaam, familienaam, wedde, Geslacht.valueOf(geslacht),
                             rijksRegisterNr);
-            campusService.read(Long.parseLong(campusId))
-                    .ifPresent(docent::setCampus);
+//            campusService.read(Long.parseLong(campusId))
+//                    .ifPresent(docent::setCampus);
             docentService.create(docent);
             response.sendRedirect(response.encodeRedirectURL(String.format(
                     REDIRECT_URL, request.getContextPath(), docent.getId())));

@@ -4,9 +4,11 @@ import be.vdab.valueobjects.Adres;
 import be.vdab.valueobjects.TelefoonNr;
 
 import javax.persistence.*;
+import javax.print.Doc;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -28,8 +30,25 @@ public class Campus implements Serializable{
     @OrderBy("fax")
     private Set<TelefoonNr> telefoonNrs;
 
+    @OneToMany
+    @JoinColumn(name = "campusid")
+    @OrderBy("voornaam, familienaam")
+    private Set<Docent> docenten;
+
     public Set<TelefoonNr> getTelefoonNrs() {
         return Collections.unmodifiableSet(telefoonNrs);
+    }
+
+    public Set<Docent> getDocenten() {
+        return Collections.unmodifiableSet(docenten);
+    }
+
+    public void add(Docent docent) {
+        docenten.add(docent);
+    }
+
+    public void remove(Docent docent) {
+        docenten.remove(docent);
     }
 
     public void add(TelefoonNr telefoonNr) {
@@ -44,6 +63,7 @@ public class Campus implements Serializable{
         this.naam = naam;
         this.adres = adres;
         this.telefoonNrs = new HashSet<>();
+        this.docenten = new LinkedHashSet<>();
     }
 
     protected Campus(){}

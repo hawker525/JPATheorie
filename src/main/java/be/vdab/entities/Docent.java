@@ -36,17 +36,33 @@ public class Docent implements Serializable{
     private long rijksRegisterNr;
     @Enumerated(EnumType.STRING)
     private Geslacht geslacht;
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "campusid")
-    private Campus campus;
 
-    public Campus getCampus() {
-        return campus;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Docent docent = (Docent) o;
+
+        return getRijksRegisterNr() == docent.getRijksRegisterNr();
     }
 
-    public void setCampus(Campus campus) {
-        this.campus = campus;
+    @Override
+    public int hashCode() {
+        return (int) (getRijksRegisterNr() ^ (getRijksRegisterNr() >>> 32));
     }
+
+//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "campusid")
+//    private Campus campus;
+//
+//    public Campus getCampus() {
+//        return campus;
+//    }
+//
+//    public void setCampus(Campus campus) {
+//        this.campus = campus;
+//    }
 
     public Docent(String voornaam, String familienaam, BigDecimal wedde,  Geslacht geslacht, long rijksRegisterNr) {
         this.voornaam = voornaam;
