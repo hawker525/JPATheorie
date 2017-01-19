@@ -6,6 +6,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Maarten Westelinck on 19/12/2016.
@@ -22,6 +26,10 @@ public class Docent implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ElementCollection
+    @CollectionTable(name = "docentenbijnamen", joinColumns = @JoinColumn(name = "docentid"))
+    @Column(name = "Bijnaam")
+    private Set<String> bijnamen;
     private String voornaam;
     private String familienaam;
     private BigDecimal wedde;
@@ -35,9 +43,14 @@ public class Docent implements Serializable{
         this.wedde = wedde;
         this.rijksRegisterNr = rijksRegisterNr;
         this.geslacht = geslacht;
+        bijnamen = new HashSet<>();
     }
 
     protected Docent(){}
+
+    public Set<String> getBijnamen() {
+        return Collections.unmodifiableSet(bijnamen);
+    }
 
     public void opslag(BigDecimal percentage) {
         BigDecimal factor = BigDecimal.ONE.add(percentage.divide(BigDecimal.valueOf(100)));
@@ -54,6 +67,14 @@ public class Docent implements Serializable{
 
     public static boolean isWeddeValid(BigDecimal wedde) {
         return wedde != null && wedde.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    public void addBijnaam(String bijnaam) {
+        bijnamen.add(bijnaam);
+    }
+
+    public void removeBijnaam(String bijnaam) {
+        bijnamen.remove(bijnaam);
     }
 
     public static boolean isRijksRegisterNrValid(long rijksRegisterNr) {
