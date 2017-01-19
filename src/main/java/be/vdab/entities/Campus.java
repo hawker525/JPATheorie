@@ -1,9 +1,13 @@
 package be.vdab.entities;
 
 import be.vdab.valueobjects.Adres;
+import be.vdab.valueobjects.TelefoonNr;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Maarten Westelinck on 19/01/2017 for fietsacademy.
@@ -19,9 +23,27 @@ public class Campus implements Serializable{
     @Embedded
     private Adres adres;
 
+    @ElementCollection
+    @CollectionTable(name = "campussentelefoonnrs", joinColumns = @JoinColumn(name = "campusid"))
+    @OrderBy("fax")
+    private Set<TelefoonNr> telefoonNrs;
+
+    public Set<TelefoonNr> getTelefoonNrs() {
+        return Collections.unmodifiableSet(telefoonNrs);
+    }
+
+    public void add(TelefoonNr telefoonNr) {
+        telefoonNrs.add(telefoonNr);
+    }
+
+    public void remove(TelefoonNr telefoonNr) {
+        telefoonNrs.remove(telefoonNr);
+    }
+
     public Campus(String naam, Adres adres) {
         this.naam = naam;
         this.adres = adres;
+        this.telefoonNrs = new HashSet<>();
     }
 
     protected Campus(){}
