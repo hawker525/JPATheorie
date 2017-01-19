@@ -34,6 +34,10 @@ public class Campus implements Serializable{
     @OrderBy("voornaam, familienaam")
     private Set<Docent> docenten;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "managerid")
+    private Manager manager;
+
     public Set<TelefoonNr> getTelefoonNrs() {
         return Collections.unmodifiableSet(telefoonNrs);
     }
@@ -87,6 +91,10 @@ public class Campus implements Serializable{
 
     public String getNaam() {
         return naam;
+    }
+
+    public Manager getManager() {
+        return manager;
     }
 
     public Adres getAdres() {
