@@ -52,17 +52,23 @@ public class Docent implements Serializable{
         return (int) (getRijksRegisterNr() ^ (getRijksRegisterNr() >>> 32));
     }
 
-//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "campusid")
-//    private Campus campus;
-//
-//    public Campus getCampus() {
-//        return campus;
-//    }
-//
-//    public void setCampus(Campus campus) {
-//        this.campus = campus;
-//    }
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "campusid")
+    private Campus campus;
+
+    public Campus getCampus() {
+        return campus;
+    }
+
+    public void setCampus(Campus campus) {
+        if (this.campus != null && this.campus.getDocenten().contains(this)) {
+            this.campus.remove(this);
+        }
+        this.campus = campus;
+        if (campus != null && !campus.getDocenten().contains(this)) {
+            campus.add(this);
+        }
+    }
 
     public Docent(String voornaam, String familienaam, BigDecimal wedde,  Geslacht geslacht, long rijksRegisterNr) {
         this.voornaam = voornaam;

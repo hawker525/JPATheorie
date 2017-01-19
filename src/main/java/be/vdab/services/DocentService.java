@@ -1,6 +1,7 @@
 package be.vdab.services;
 
 import be.vdab.entities.Docent;
+import be.vdab.exceptions.DocentBestaatAlException;
 import be.vdab.filters.JPAFilter;
 import be.vdab.repositories.DocentRepository;
 import be.vdab.valueobjects.AantalDocentenPerWedde;
@@ -86,6 +87,7 @@ public class DocentService extends AbstractService{
     }
 
     public void create(Docent docent) {
+        if(docentRepository.findByRijksRegisterNr(docent.getRijksRegisterNr()).isPresent()) throw new DocentBestaatAlException();
         beginTransaction();
         try {
             docentRepository.create(docent);
