@@ -63,6 +63,7 @@ public class DocentRepository extends AbstractRepository{
                 .setParameter("tot", tot)
                 .setFirstResult(vanafRij)
                 .setMaxResults(aantalRijen)
+                .setHint("javax.persistence.loadgraph", getEntityManager().createEntityGraph(Docent.MET_CAMPUS))
                 .getResultList();
     }
 }

@@ -3,6 +3,7 @@ package be.vdab.entities;
 import be.vdab.enums.Geslacht;
 
 import javax.persistence.*;
+import javax.print.Doc;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,8 +18,11 @@ import java.util.*;
 
 @Entity
 @Table(name = "docenten")
+@NamedEntityGraph(name = Docent.MET_CAMPUS
+        , attributeNodes = @NamedAttributeNode(value = "campus", subgraph = "metManager"), subgraphs = @NamedSubgraph(name = "metManager", attributeNodes = @NamedAttributeNode("manager")))
 public class Docent implements Serializable{
     private static final long serialVersionUID = 1L;
+    public static final String MET_CAMPUS = "Docent.metCampus";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
