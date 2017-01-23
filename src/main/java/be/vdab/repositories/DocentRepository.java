@@ -1,5 +1,6 @@
 package be.vdab.repositories;
 
+import be.vdab.entities.Campus;
 import be.vdab.entities.Docent;
 import be.vdab.valueobjects.AantalDocentenPerWedde;
 import be.vdab.valueobjects.VoornaamEnId;
@@ -53,6 +54,13 @@ public class DocentRepository extends AbstractRepository{
     public List<VoornaamEnId> findVoornamen() {
         return getEntityManager().createQuery(
                 "select new be.vdab.valueobjects.VoornaamEnId(d.id, d.voornaam) from Docent d", VoornaamEnId.class)
+                .getResultList();
+    }
+
+    public List<Docent> findBestBetaaldeVanEenCampus(Campus campus) {
+        return getEntityManager()
+                .createNamedQuery("Docent.findBestBetaaldeVanEenCampus", Docent.class)
+                .setParameter("campus", campus)
                 .getResultList();
     }
 

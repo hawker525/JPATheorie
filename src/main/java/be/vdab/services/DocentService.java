@@ -1,8 +1,10 @@
 package be.vdab.services;
 
+import be.vdab.entities.Campus;
 import be.vdab.entities.Docent;
 import be.vdab.exceptions.DocentBestaatAlException;
 import be.vdab.filters.JPAFilter;
+import be.vdab.repositories.CampusRepository;
 import be.vdab.repositories.DocentRepository;
 import be.vdab.valueobjects.AantalDocentenPerWedde;
 import be.vdab.valueobjects.VoornaamEnId;
@@ -11,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,7 @@ import java.util.Optional;
  */
 public class DocentService extends AbstractService{
     private final DocentRepository docentRepository = new DocentRepository();
+    private final CampusRepository campusRepository = new CampusRepository();
 
     public Optional<Docent> read(long id) {
         return docentRepository.read(id);
@@ -96,6 +100,13 @@ public class DocentService extends AbstractService{
             rollback();
             throw ex;
         }
+    }
+
+    public List<Docent> findBestBetaaldeVanEenCampus(long id) {
+        Optional<Campus> optionalCampus = campusRepository.read(id);
+        return optionalCampus.isPresent() ?
+                docentRepository.findBestBetaaldeVanEenCampus(optionalCampus.get()) :
+                Collections.emptyList();
     }
 
     public void delete(long id) {
